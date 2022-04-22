@@ -1,29 +1,23 @@
 import React from "react";
 
-function Drawer() {
+function Drawer({onClose, onRemove , items=[]}) {
     return (
-      <div className="overlay" style={{display:'none'}}>
+      <div className="overlay">
         <div className="drawer">
-          <h2>Корзина <img className="remove-btn" src="/img/btn-remove.svg" alt="Remove"/></h2>
+          <h2>Корзина <img onClick={onClose} className="remove-btn" src="/img/btn-remove.svg" alt="Close"/></h2>
           <div className="items">
-            
-            <div className="cart-item"> 
-              <div className="cart-item-img" style={{backgroundImage: 'url(/img/sneakers/1.jpg)'}}></div>
-              <div className="cart-text">
-                <p>Мужские Кроссовки Nike Biazer Mid Suede</p>
-                <b>12 999 тенге</b>
+
+            {items.map((obj) => (
+              <div className="cart-item"> 
+                <div className="cart-item-img" style={{backgroundImage: `url(${obj.avatar})`}}></div>
+                  <div className="cart-text">
+                    <p>{obj.name}</p>
+                    <b>{obj.price} тенге</b>
+                  </div>
+                <img className="remove-btn" onClick={() => onRemove(obj.id)} src="/img/btn-remove.svg" alt="Remove"/>
               </div>
-              <img className="remove-btn" src="/img/btn-remove.svg" alt="Remove"/>
-            </div>
-            <div className="cart-item"> 
-              <div className="cart-item-img" style={{backgroundImage: 'url(/img/sneakers/1.jpg)'}}></div>
-              <div className="cart-text">
-                <p>Мужские Кроссовки Nike Biazer Mid Suede</p>
-                <b>12 999 тенге</b>
-              </div>
-              <img className="remove-btn" src="/img/btn-remove.svg" alt="Remove"/>
-            </div>
-            
+            ))}
+         
           </div>
 
             <div className="cart-total-block">
@@ -36,7 +30,7 @@ function Drawer() {
                 <li className="items-li">
                   <span>Налог 5%</span>
                   <div></div>
-                  <b>"1074 тенге</b>
+                  <b>1074 тенге</b>
                 </li>
               </ul>
               <button className="green-button">Оформить заказ <img src="/img/arrow.svg" alt="Arrow" /></button>

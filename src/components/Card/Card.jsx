@@ -1,27 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import './Card.module.scss'
 
-function Card(props) {
+function Card({id,name, avatar, price, onFavorite, onPlus, favorited=false}) {
 
-  const onClickButton = () => {
-    alert(props.title)
+  const [isAdded, setIsAdded] = useState(false)
+  const [isFavorite, setIsFavorite] = useState(favorited)
+
+  const onClickPlus = () => {
+    onPlus({name, avatar, price})
+    setIsAdded(!isAdded)
+  }
+
+  const onClickFavorite = () => {
+    onFavorite({name, avatar, price, id})
+    setIsFavorite(!isFavorite)
   }
 
     return (
         <div className="card">
-          <div className="favorite">
-            <img src="/img/heart.svg" alt="Unliked"/>
+          <div className="favorite" onClick={onClickFavorite}>
+            <img src={isFavorite ? "/img/liked.svg" : "/img/unliked.svg" } alt="Unliked" />
           </div>
-          <img width={133} height={122} src={props.imageUrl} alt="Sneakers"/>
-          <h5>{props.title}</h5>
+          <img width={133} height={122} src={avatar} alt="Sneakers"/>
+          <h5>{name}</h5>
           <div className="card-btn">
               <div className="card-info">
                 <span>Цена:</span>
-                <b>{props.price} тенге</b>
+                <b>{price} тенге</b>
               </div>
-              <button className="button"onClick={props.onClick}>
-                <img width={11} height={11} src="/img/plus.svg" alt="Plus"/>
-              </button>
+              <img 
+                className="plus" 
+                onClick={onClickPlus} 
+                src={isAdded ? "/img/btn-checked.svg" : "/img/btn-plus.svg" } 
+                alt="Plus"
+              />
             </div>
           </div>
     )

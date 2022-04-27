@@ -1,50 +1,51 @@
-import React from "react";
-import Card from "../components/Card/Card";
+import React from 'react';
+import Card from '../components/Card/Card';
 
 function Home({
-    searchValue,
-    setSearchValue,
-    changeSearchInput,
-    items,
-    onAddToFavorite,
-    onAddToCard
+  items,
+  searchValue,
+  setSearchValue,
+  onChangeSearchInput,
+  onAddToFavorite,
+  onAddToCart,
+  isLoading,
 }) {
-    return (
-        <div className="content">
-          <div className="content-info">
-            <h1 className="conten-h1">
-              {searchValue ? 'Поиск...' : 'Все кроссовки'}
-            </h1>
-              <div className="search-block">
-                <img src="/img/search.svg" alt="Search"/>
-                  {searchValue 
-                    && <img 
-                         onClick={() => setSearchValue('')} 
-                         className="remove-close clear" 
-                         src="/img/btn-remove.svg" alt="Close"
-                        />
-                   }
-                <input onChange={changeSearchInput} value={searchValue} placeholder="Поиск..."/>
-              </div>
-          </div>
 
-          <div className="cneakers">
-            {items
-                .filter(item => item.name.toLowerCase().includes(searchValue.toLowerCase()))
-                .map(item => 
-                    <Card 
-                        name={item.name} 
-                        price={item.price} 
-                        avatar={item.avatar}
-                        id={item.id} 
-                        key={item.id} 
-                        onFavorite={(obj) =>onAddToFavorite(obj)}
-                        onPlus={(obj) =>onAddToCard(obj)}
-                    />)
-            }
+  const renderItems = () => {
+    const filtredItems = items.filter((item) =>
+      item.name.toLowerCase().includes(searchValue.toLowerCase())
+    );
+    return (isLoading ? [...Array(8)] : filtredItems).map((item, index) => (
+      <Card
+        key={index}
+        onFavorite={(obj) => onAddToFavorite(obj)}
+        onPlus={(obj) => onAddToCart(obj)}
+        loading={isLoading}
+        {...item}
+      />
+    ));
+  };
+
+  return (
+    <div className="content p-40">
+      <div className="d-flex align-center justify-between mb-40">
+        <h1>{searchValue ? `Поиск по запросу: "${searchValue}"` : 'Все кроссовки'}</h1>
+        <div className="search-block d-flex">
+          <img src="/img/search.svg" alt="Search" />
+          {searchValue && (
+            <img
+              onClick={() => setSearchValue('')}
+              className="clear cu-p"
+              src="/img/btn-remove.svg"
+              alt="Clear"
+            />
+          )}
+          <input onChange={onChangeSearchInput} value={searchValue} placeholder="Поиск..." />
         </div>
-
       </div>
-    )
+      <div className="d-flex flex-wrap">{renderItems()}</div>
+    </div>
+  );
 }
+
 export default Home;
